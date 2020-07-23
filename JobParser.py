@@ -1,10 +1,10 @@
 #Indeed.com only currently
 from bs4 import BeautifulSoup as soup
 from urllib.request import urlopen as uReq
-# sear=str(input("What type of job are you looking for?"))
-# location=str(input("What location do you want to search around?"))
-sear="python"
-location="kolkata"
+sear=str(input("What type of job are you looking for?"))
+location=str(input("What location do you want to search around?"))
+# sear="python"
+# location="kolkata"
 my_url= f'https://www.indeed.co.in/jobs?q={sear.replace(" ", "+")}&l={location.replace(" ", "+")}'
 print(my_url)
 uClient = uReq(my_url)
@@ -36,8 +36,3 @@ for container in containers:
 f.close()
 from subprocess import Popen
 p = Popen(filename, shell=True)
-#
-# https://www.naukri.com/python-scripting-jobs-in-kolkata?k=python%20scripting&l=kolkata
-#
-#
-# https://www.monsterindia.com/srp/results?query=python&locations=kolkata
