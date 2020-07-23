@@ -1,10 +1,9 @@
-#Indeed.com only currently
 from bs4 import BeautifulSoup as soup
 from urllib.request import urlopen as uReq
 sear=str(input("What type of job are you looking for?"))
 location=str(input("What location do you want to search around?"))
-# sear="python"
-# location="kolkata"
+#sear="python"
+#location="kolkata"
 my_url= f'https://www.indeed.co.in/jobs?q={sear.replace(" ", "+")}&l={location.replace(" ", "+")}'
 print(my_url)
 uClient = uReq(my_url)
@@ -32,7 +31,7 @@ for container in containers:
         salaryt="Salary not mentioned"
         f.write(str(str(jobtitle).replace(",", "|"))+ "," + str(str(com.strip()).replace(",", "|")) + "," + str(str(loc.text).replace(",", "|")) + "," + str(str(salaryt))+ "," +str(str(link)) + "\n")
     else:
-        f.write(str(str(jobtitle).replace(",", "|")) + "," +str(str(com.strip()).replace(",", "|")) + "," + str(str(loc.text).replace(",", "|")) + "," +str(str(salary.text).replace(",", "|").encode('utf-8')).replace("\xe2\x82\xb9","").replace("b'\n","") + "," +str(str(link)) + "\n")
+        f.write(str(str(jobtitle).replace(",", "|")) + "," +str(str(com.strip()).replace(",", "|")) + "," + str(str(loc.text).replace(",", "|")) + "," +str(str(salary.text).replace(",", "|").encode('utf-8')).replace("\\xe2\\x82\\xb9","Rupees").replace("b'\\n","") + "," +str(str(link)) + "\n")
 f.close()
 from subprocess import Popen
 p = Popen(filename, shell=True)
