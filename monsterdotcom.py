@@ -52,6 +52,6 @@ with open(filename, "w", newline='') as myfile:
         loc = str(container.find("span", {"class": "loc"}).text).strip()
         sal = container.findAll("span", {"class": "loc"})
         salary = sal[2].text
-        spamWriter.writerow([str(str(jobtitle)), str(str(com.strip())), str(str(loc)), str(str(salary)), str(str(link))])
+        spamWriter.writerow([str(str(jobtitle)), str(str(com.strip())), str(str(loc)), str(str(salary)), f'=HYPERLINK("{str(str(link).strip())])
 from subprocess import Popen
 p = Popen(filename, shell=True)
