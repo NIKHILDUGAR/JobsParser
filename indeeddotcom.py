@@ -32,9 +32,9 @@ with open(filename, "w", newline='') as myfile:
             salary=container.find("span",{"class": "salaryText"})
             if salary is None:
                 salaryt="Salary not mentioned"
-                spamWriter.writerow([str(str(jobtitle)) , str(str(com.strip())), str(str(loc.text)) , str(str(salaryt)),str(str(link)) ])
+                spamWriter.writerow([str(str(jobtitle)) , str(str(com.strip())), str(str(loc.text)) , str(str(salaryt)),f'=HYPERLINK("{str(str(link).strip()) ])
             else:
-                spamWriter.writerow([str(str(jobtitle)) , str(str(com.strip())) , str(str(loc.text)) ,str(str(salary.text).encode('utf-8')).replace("\\xe2\\x82\\xb9","Rs.").replace("b'\\n","").replace("'",""),str(str(link)) ])
+                spamWriter.writerow([str(str(jobtitle)) , str(str(com.strip())) , str(str(loc.text)) ,str(str(salary.text).encode('utf-8')).replace("\\xe2\\x82\\xb9","Rs.").replace("b'\\n","").replace("'",""),f'=HYPERLINK("{str(str(link).strip()) ])
 
 from subprocess import Popen
 p = Popen(filename, shell=True)
