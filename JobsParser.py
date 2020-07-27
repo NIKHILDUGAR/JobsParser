@@ -17,6 +17,7 @@ filename = f"{sear} jobs in {location}.csv"
 with open(filename, "w", newline='') as myfile:
     spamWriter = csv.writer(myfile, dialect='excel')
     spamWriter.writerow(["Job Title","Company","Location","Salary","Link"])
+
     myurll=[my_url,my_url+"&start=10",my_url+"&start=20"]
     for my_url in myurll:
         # print(my_url)
@@ -40,9 +41,9 @@ with open(filename, "w", newline='') as myfile:
             salary=container.find("span",{"class": "salaryText"})
             if salary is None:
                 salaryt="Salary not mentioned"
-                spamWriter.writerow([str(str(jobtitle)) , str(str(com.strip())), str(str(loc.text)) , str(str(salaryt)),str(str(link)) ])
+                spamWriter.writerow([str(str(jobtitle)) , str(str(com.strip())), str(str(loc.text)) , str(str(salaryt)),f'=HYPERLINK("{str(str(link).strip())}")' ])
             else:
-                spamWriter.writerow([str(str(jobtitle)) , str(str(com.strip())) , str(str(loc.text)) ,str(str(salary.text).encode('utf-8')).replace("\\xe2\\x82\\xb9","Rs.").replace("b'\\n","").replace("'",""),str(str(link)) ])
+                spamWriter.writerow([str(str(jobtitle)) , str(str(com.strip())) , str(str(loc.text)) ,str(str(salary.text).encode('utf-8')).replace("\\xe2\\x82\\xb9","Rs.").replace("b'\\n","").replace("'",""),f'=HYPERLINK("{str(str(link).strip())}")' ])
     try:
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument("--incognito")
@@ -76,6 +77,6 @@ with open(filename, "w", newline='') as myfile:
         loc = str(container.find("span", {"class": "loc"}).text).strip()
         sal = container.findAll("span", {"class": "loc"})
         salary = sal[2].text
-        spamWriter.writerow([str(str(jobtitle).strip()), str(str(com.strip())), str(str(loc).strip()), str(str(salary).strip()), str(str(link).strip())])
+        spamWriter.writerow([str(str(jobtitle).strip()), str(str(com.strip())), str(str(loc).strip()), str(str(salary).strip()), f'=HYPERLINK("{str(str(link).strip())}")'])
 from subprocess import Popen
 p = Popen(filename, shell=True)
