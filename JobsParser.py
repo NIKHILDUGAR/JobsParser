@@ -12,8 +12,11 @@ sear=str(input("What type of job are you looking for?"))
 location=str(input("What location do you want to search around?"))
 my_url= f'https://www.indeed.co.in/jobs?q={sear.replace(" ", "+")}&l={location.replace(" ", "+")}'
 monsterurl=f'https://www.monsterindia.com/srp/results?sort=1&limit=100&query={sear.replace(" ", "%20")}&locations={location.replace(" ", "+")}'
+naukriurl= f'https://www.naukri.com/{sear.replace(" ", "-")}-jobs-in-{location.replace(" ", "+")}'
 filename = f"{sear} jobs in {location}.csv"
+naukriurls = [naukriurl, naukriurl + "-2", naukriurl + "-3"]
 # f = open(filename, "w", encoding = 'ANSI')
+seen=set()
 with open(filename, "w", newline='') as myfile:
     spamWriter = csv.writer(myfile, dialect='excel')
     spamWriter.writerow(["Job Title","Company","Location","Salary","Link"])
@@ -78,5 +81,42 @@ with open(filename, "w", newline='') as myfile:
         sal = container.findAll("span", {"class": "loc"})
         salary = sal[2].text
         spamWriter.writerow([str(str(jobtitle).strip()), str(str(com.strip())), str(str(loc).strip()), str(str(salary).strip()), f'=HYPERLINK("{str(str(link).strip())}")'])
+    for naukriurl in naukriurls:
+        try:
+            chrome_options = webdriver.ChromeOptions()
+            chrome_options.add_argument("--incognito")
+            driver = webdriver.Chrome(executable_path="chromedriver.exe")
+        except:
+            binary: str = r'C:\Program Files\Mozilla Firefox\firefox.exe'
+            options = Options()
+            options.set_headless(headless=True)
+            options.binary = binary
+            cap = DesiredCapabilities().FIREFOX
+            cap["marionette"] = True
+            driver = webdriver.Firefox(firefox_options=options, capabilities=cap, executable_path="geckodriver.exe")
+        driver.get(naukriurl)
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        src = driver.page_source
+        driver.close()
+        page_soup = soup(src, "lxml")
+        containers = page_soup.findAll("div", {"class": "jobTupleHeader"})
+        for container in containers:
+            name_container1 = container.find("a", {"class": "title"})
+            link = name_container1.get('href')
+            jobtitle = name_container1.text
+            cycontainer = container.find("div", {"class": "companyInfo"})
+            cy = cycontainer.find("a")
+            com = cy.text
+            loc = container.find("li", {"class": "location"})
+            locs = loc.find("span")
+            loc = locs.text
+            salary = container.find("li", {"class": "salary"})
+            sal = salary.find("span")
+            salary = sal.text
+            l = [str(str(jobtitle).strip()), str(str(com.strip())), str(str(loc).strip()), str(str(salary).strip()),
+                 f'=HYPERLINK("{str(str(link).strip())}")']
+            if l[1] not in seen:
+                spamWriter.writerow(l)
+                seen.add(l[1])
 from subprocess import Popen
 p = Popen(filename, shell=True)
